@@ -1,0 +1,28 @@
+chicago_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: 'your_snowflake_account'
+      user: 'your_username'
+      password: 'your_password'
+      role: accountadmin
+      database: snowflake_learning_db
+      schema: workshop
+      warehouse: snowflake_learning_wh
+      threads: 4
+      client_session_keep_alive: False
+      query_tag: dbt_workshop
+      
+    prod:
+      type: snowflake
+      account: 'your_snowflake_account'
+      user: 'your_username'
+      password: 'your_password'
+      role: accountadmin
+      database: snowflake_learning_db
+      schema: workshop
+      warehouse: snowflake_learning_wh
+      threads: 8
+      client_session_keep_alive: False
+      query_tag: dbt_workshop

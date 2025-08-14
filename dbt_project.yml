@@ -6,7 +6,7 @@ config-version: 2
 profile: 'chicago_analytics'
 
 # These configurations specify where dbt should look for different types of files.
-source-paths: ["models"]
+model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 seed-paths: ["seeds"]

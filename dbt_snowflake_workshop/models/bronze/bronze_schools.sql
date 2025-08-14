@@ -54,4 +54,4 @@ select
     Longitude,
     Location,
     current_timestamp() as ingested_at
-from {{ source('raw_data', 'chicago_public_schools') }}
+from {{ source('raw_data', 'chicago_public_schools_raw') }}

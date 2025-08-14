@@ -1,0 +1,138 @@
+version: 2
+
+models:
+  - name: bronze_listings
+    description: Raw real estate listings data ingested into the bronze layer
+    columns:
+      - name: LISTING_ID
+        description: Unique listing identifier
+        tests:
+          - not_null
+          - unique
+      - name: TYPE
+        description: Property type
+        tests:
+          - accepted_values:
+              values: [condo, townhouse, single_family]
+      - name: LISTPRICE
+        description: Listing price
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              row_condition: "LISTPRICE is not null"
+      - name: STATUS
+        description: Listing status
+        tests:
+          - accepted_values:
+              values: [for_sale, sold, pending]
+      - name: COMMUNITY_AREA_NUMBER
+        description: Community area number (1-77)
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+              row_condition: "COMMUNITY_AREA_NUMBER is not null"
+
+  - name: bronze_crime
+    description: Raw crime incident data ingested into the bronze layer
+    columns:
+      - name: ID
+        description: Unique crime incident identifier
+        tests:
+          - not_null
+          - unique
+      - name: DATE
+        description: Date of the crime incident (string format in raw)
+        tests:
+          - not_null
+      - name: PRIMARY_TYPE
+        description: Primary crime type
+        tests:
+          - not_null
+      - name: COMMUNITY_AREA_NUMBER
+        description: Community area number (1-77)
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+              row_condition: "COMMUNITY_AREA_NUMBER is not null"
+
+  - name: bronze_census
+    description: Raw census demographic data ingested into the bronze layer
+    columns:
+      - name: COMMUNITY_AREA_NUMBER
+        description: Community area number (primary key)
+        tests:
+          - not_null
+          - unique
+      - name: PERCENT_OF_HOUSING_CROWDED
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "PERCENT_OF_HOUSING_CROWDED is not null"
+      - name: PERCENT_HOUSEHOLDS_BELOW_POVERTY
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "PERCENT_HOUSEHOLDS_BELOW_POVERTY is not null"
+      - name: PERCENT_AGED_16__UNEMPLOYED
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "PERCENT_AGED_16__UNEMPLOYED is not null"
+      - name: PERCENT_AGED_25__WITHOUT_HIGH_SCHOOL_DIPLOMA
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "PERCENT_AGED_25__WITHOUT_HIGH_SCHOOL_DIPLOMA is not null"
+      - name: PERCENT_AGED_UNDER_18_OR_OVER_64
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "PERCENT_AGED_UNDER_18_OR_OVER_64 is not null"
+      - name: PER_CAPITA_INCOME
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              row_condition: "PER_CAPITA_INCOME is not null"
+      - name: HARDSHIP_INDEX
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "HARDSHIP_INDEX is not null"
+
+  - name: bronze_schools
+    description: Raw Chicago Public Schools data ingested into the bronze layer
+    columns:
+      - name: School_ID
+        description: Unique school identifier
+        tests:
+          - not_null
+          - unique
+      - name: COMMUNITY_AREA_NUMBER
+        description: Community area number (1-77)
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+              row_condition: "COMMUNITY_AREA_NUMBER is not null"
+      - name: SAFETY_SCORE
+        description: School safety score
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "SAFETY_SCORE is not null"
+      - name: AVERAGE_STUDENT_ATTENDANCE
+        description: Average student attendance percentage
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+              row_condition: "AVERAGE_STUDENT_ATTENDANCE is not null"

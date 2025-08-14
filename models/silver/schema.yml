@@ -1,0 +1,161 @@
+version: 2
+
+models:
+  - name: silver_listings
+    description: Cleaned and standardized real estate listings data
+    columns:
+      - name: LISTING_ID
+        tests:
+          - not_null
+          - unique
+      - name: TYPE
+        tests:
+          - accepted_values:
+              values: [condo, townhouse, single_family]
+      - name: year_built
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1800
+              max_value: 2100
+              mostly: 0.99
+      - name: beds
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              mostly: 0.99
+      - name: baths
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              mostly: 0.99
+      - name: list_price
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              mostly: 0.99
+      - name: status
+        tests:
+          - accepted_values:
+              values: [for_sale, sold, pending]
+      - name: listing_date
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: '2000-01-01'
+              max_value: '2100-01-01'
+              strictly: false
+              row_condition: "listing_date is not null"
+      - name: community_area_number
+        tests:
+          - relationships:
+              to: ref('silver_census')
+              field: community_area_number
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+
+  - name: silver_crime
+    description: Cleaned and standardized crime incident data
+    columns:
+      - name: ID
+        tests:
+          - not_null
+          - unique
+      - name: incident_date
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: '2000-01-01'
+              max_value: '{{ modules.datetime.date.today() }}'
+              strictly: false
+              row_condition: "incident_date is not null"
+      - name: primary_type
+        tests:
+          - not_null
+      - name: community_area_number
+        tests:
+          - relationships:
+              to: ref('silver_census')
+              field: community_area_number
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+
+  - name: silver_census
+    description: Cleaned and standardized census demographic data
+    columns:
+      - name: community_area_number
+        tests:
+          - not_null
+          - unique
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+      - name: percent_housing_crowded
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: percent_households_below_poverty
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: percent_unemployed
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: percent_without_high_school
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: percent_dependent_population
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: per_capita_income
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+      - name: hardship_index
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+
+  - name: silver_schools
+    description: Cleaned and standardized Chicago Public Schools data
+    columns:
+      - name: School_ID
+        tests:
+          - not_null
+          - unique
+      - name: community_area_number
+        tests:
+          - relationships:
+              to: ref('silver_census')
+              field: community_area_number
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 77
+      - name: safety_score
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: average_student_attendance
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: average_teacher_attendance
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: iep_compliance_rate
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100

@@ -1,0 +1,99 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: Raw Chicago datasets from various sources
+    database: your_database
+    schema: raw
+    tables:
+      - name: chicago_listings
+        description: Real estate listings data from Chicago
+        columns:
+          - name: LISTING_ID
+            description: Unique listing identifier
+            tests:
+              - unique
+              - not_null
+          - name: TYPE
+            description: Type of property (condo, townhouse, single_family)
+            tests:
+              - not_null
+          - name: LISTPRICE
+            description: Listing price of the property
+            tests:
+              - not_null
+          - name: STATUS
+            description: Status of the listing (for_sale, sold, pending)
+            tests:
+              - not_null
+          - name: COMMUNITY_AREA_NUMBER
+            description: Community area number
+            tests:
+              - not_null
+              
+      - name: chicago_crime
+        description: Crime incident data from Chicago Police Department
+        columns:
+          - name: ID
+            description: Unique crime incident identifier
+            tests:
+              - unique
+              - not_null
+          - name: CASE_NUMBER
+            description: Case number for the crime incident
+            tests:
+              - not_null
+          - name: DATE
+            description: Date of the crime incident
+            tests:
+              - not_null
+          - name: PRIMARY_TYPE
+            description: Primary type of crime
+            tests:
+              - not_null
+          - name: COMMUNITY_AREA_NUMBER
+            description: Community area where crime occurred
+            tests:
+              - not_null
+              
+      - name: chicago_census
+        description: Census demographic data for Chicago community areas
+        columns:
+          - name: COMMUNITY_AREA_NUMBER
+            description: Community area number
+            tests:
+              - unique
+              - not_null
+          - name: COMMUNITY_AREA_NAME
+            description: Name of the community area
+            tests:
+              - not_null
+          - name: PER_CAPITA_INCOME
+            description: Per capita income for the community area
+            tests:
+              - not_null
+          - name: HARDSHIP_INDEX
+            description: Hardship index for the community area
+            tests:
+              - not_null
+              
+      - name: chicago_public_schools
+        description: Chicago Public Schools performance data
+        columns:
+          - name: School_ID
+            description: Unique school identifier
+            tests:
+              - unique
+              - not_null
+          - name: NAME_OF_SCHOOL
+            description: Name of the school
+            tests:
+              - not_null
+          - name: COMMUNITY_AREA_NUMBER
+            description: Community area where school is located
+            tests:
+              - not_null
+          - name: SAFETY_SCORE
+            description: School safety score
+            tests:
+              - not_null

@@ -18,4 +18,4 @@ select
     PER_CAPITA_INCOME,
     HARDSHIP_INDEX,
     current_timestamp() as ingested_at
-from {{ source('raw_data', 'chicago_census') }}
+from {{ source('raw_data', 'chicago_census_raw') }}

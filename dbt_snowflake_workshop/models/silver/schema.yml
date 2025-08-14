@@ -17,22 +17,18 @@ models:
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 1800
               max_value: 2100
-              mostly: 0.99
       - name: beds
         tests:
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
-              mostly: 0.99
       - name: baths
         tests:
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
-              mostly: 0.99
       - name: list_price
         tests:
           - dbt_expectations.expect_column_values_to_be_between:
               min_value: 0
-              mostly: 0.99
       - name: status
         tests:
           - accepted_values:

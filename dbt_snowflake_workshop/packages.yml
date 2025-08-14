@@ -1,6 +1,6 @@
 packages:
   - package: calogica/dbt_expectations
-    version: ">=0.10.2"
+    version: ">=0.11.0"
   # Optional, commonly used utilities
   - package: dbt-labs/dbt_utils
     version: ">=1.0.0"

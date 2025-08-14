@@ -27,4 +27,4 @@ select
     LISTING_DATE,
     COMMUNITY_AREA_NUMBER,
     current_timestamp() as ingested_at
-from {{ source('raw_data', 'chicago_listings') }}
+from {{ source('raw_data', 'chicago_listings_raw') }}

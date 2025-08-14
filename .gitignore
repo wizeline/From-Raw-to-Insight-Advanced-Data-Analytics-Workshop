@@ -66,9 +66,6 @@ Thumbs.db
 .env.test.local
 .env.production.local
 
-# Profiles (contains sensitive credentials)
-profiles.yml
-
 # Logs
 *.log
 logs/

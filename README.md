@@ -12,8 +12,6 @@ This dbt project transforms and analyzes four key Chicago datasets:
 
 ## Architecture
 
-The project follows a **bronze/silver/gold** data architecture:
-
 ### Bronze Layer (`models/bronze/`)
 - Raw data ingestion with minimal transformation
 - Preserves original data structure
@@ -35,7 +33,7 @@ The project follows a **bronze/silver/gold** data architecture:
 
 ### Prerequisites
 - Python 3.8+
-- dbt Core 1.7.0+
+- **dbt Core 1.9.0+** (Upgraded from 1.7.0)
 - Snowflake account and credentials
 
 ### Installation
@@ -46,7 +44,8 @@ The project follows a **bronze/silver/gold** data architecture:
    ```
 
 2. **Configure Snowflake connection**:
-   - Update `profiles.yml` with your Snowflake credentials
+   - Copy `profiles.yml.example` to `profiles.yml`
+   - Update with your Snowflake credentials
    - Replace placeholder values:
      - `your_snowflake_account`
      - `your_username`
@@ -123,6 +122,12 @@ dbt docs serve
 - `test_census_percentages_valid`: Ensures percentage values are 0-100
 - `test_school_scores_valid`: Ensures school scores are 0-100
 
+### Great Expectations Tests
+- Uses `dbt_expectations` package for advanced data quality testing
+- Column value validations
+- Statistical tests
+- Custom expectation tests
+
 ## Macros
 
 ### Data Processing Macros (`macros/`)
@@ -156,8 +161,9 @@ The project enables analysis of:
 ```
 chicago_analytics/
 ├── dbt_project.yml          # Project configuration
-├── profiles.yml             # Snowflake connection settings
-├── requirements.txt         # Python dependencies
+├── profiles.yml             # Snowflake connection settings (gitignored)
+├── profiles.yml.example     # Example configuration for team members
+├── requirements.txt         # Python dependencies (dbt 1.9+)
 ├── README.md               # Project documentation
 ├── models/
 │   ├── sources.yml         # Source definitions and tests
@@ -170,6 +176,21 @@ chicago_analytics/
 ├── snapshots/              # Type 2 SCD snapshots
 └── analyses/               # Ad-hoc analyses
 ```
+
+## dbt 1.9 Upgrade Benefits
+
+This project has been upgraded from dbt 1.7.0 to 1.9.0, providing:
+
+### New Features
+- **Enhanced testing capabilities**: More robust test execution and reporting
+- **Improved performance**: Better query optimization and caching
+- **Advanced macros**: More powerful macro functionality
+- **Better error handling**: More informative error messages and debugging
+
+### Compatibility
+- **Modern dbt practices**: Uses latest dbt best practices and patterns
+- **Future-proof**: Ready for upcoming dbt versions
+- **Enhanced documentation**: Better model documentation and lineage tracking
 
 ## Contributing
 

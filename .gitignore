@@ -1,17 +1,17 @@
 # Raw data files (CSV, JSON, etc.)
-raw/*.csv
-raw/*.json
-raw/*.xlsx
-raw/*.parquet
-raw/*.avro
-raw/*.xml
+dbt_snowflake_workshop/raw/*.csv
+dbt_snowflake_workshop/raw/*.json
+dbt_snowflake_workshop/raw/*.xlsx
+dbt_snowflake_workshop/raw/*.parquet
+dbt_snowflake_workshop/raw/*.avro
+dbt_snowflake_workshop/raw/*.xml
 
 # dbt artifacts
-target/
-dbt_packages/
-dbt_modules/
-logs/
-dbt_project.yml.bak
+dbt_snowflake_workshop/target/
+dbt_snowflake_workshop/dbt_packages/
+dbt_snowflake_workshop/dbt_modules/
+dbt_snowflake_workshop/logs/
+dbt_snowflake_workshop/dbt_project.yml.bak
 
 # Python
 __pycache__/
@@ -80,8 +80,8 @@ tmp/
 docs/
 
 # Seeds (if they contain sensitive data)
-seeds/*.csv
-seeds/*.json
+dbt_snowflake_workshop/seeds/*.csv
+dbt_snowflake_workshop/seeds/*.json
 
 # Snapshots (if they contain sensitive data)
-snapshots/*.sql
+dbt_snowflake_workshop/snapshots/*.sql

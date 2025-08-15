@@ -3,8 +3,8 @@ version: 2
 sources:
   - name: raw_data
     description: Raw Chicago datasets from various sources
-    database: your_database
-    schema: raw
+    database: snowflake_raw
+    schema: workshop
     tables:
       - name: chicago_listings_raw
         description: Real estate listings data from Chicago

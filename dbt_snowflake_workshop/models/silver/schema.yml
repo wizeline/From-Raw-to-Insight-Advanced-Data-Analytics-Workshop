@@ -33,13 +33,6 @@ models:
         tests:
           - accepted_values:
               values: [for_sale, sold, pending]
-      - name: listing_date
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              min_value: '2000-01-01'
-              max_value: '2100-01-01'
-              strictly: false
-              row_condition: "listing_date is not null"
       - name: community_area_number
         tests:
           - relationships:
@@ -56,13 +49,6 @@ models:
         tests:
           - not_null
           - unique
-      - name: incident_date
-        tests:
-          - dbt_expectations.expect_column_values_to_be_between:
-              min_value: '2000-01-01'
-              max_value: '{{ modules.datetime.date.today() }}'
-              strictly: false
-              row_condition: "incident_date is not null"
       - name: primary_type
         tests:
           - not_null

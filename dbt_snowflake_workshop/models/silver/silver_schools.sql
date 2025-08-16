@@ -11,7 +11,115 @@ with bronze_schools as (
     select * from {{ ref('bronze_schools') }}
 ),
 
-cleaned_schools as (
+-- Step 1: Clean NDA values
+nda_cleaned_schools as (
+    select 
+        School_ID,
+        NAME_OF_SCHOOL,
+        school_type,
+        Street_Address,
+        City,
+        State,
+        ZIP_Code,
+        Phone_Number,
+        Link,
+        Network_Manager,
+        Collaborative_Name,
+        Adequate_Yearly_Progress_Made_,
+        Track_Schedule,
+        CPS_Performance_Policy_Status,
+        CPS_Performance_Policy_Level,
+        HEALTHY_SCHOOL_CERTIFIED,
+        Safety_Icon,
+        {{ clean_nda_values('SAFETY_SCORE') }} as SAFETY_SCORE,
+        Family_Involvement_Icon,
+        {{ clean_nda_values('Family_Involvement_Score') }} as Family_Involvement_Score,
+        Environment_Icon,
+        {{ clean_nda_values('Environment_Score') }} as Environment_Score,
+        Instruction_Icon,
+        {{ clean_nda_values('Instruction_Score') }} as Instruction_Score,
+        Leaders_Icon,
+        {{ clean_nda_values('Leaders_Score') }} as Leaders_Score,
+        Teachers_Icon,
+        {{ clean_nda_values('Teachers_Score') }} as Teachers_Score,
+        Parent_Engagement_Icon,
+        {{ clean_nda_values('Parent_Engagement_Score') }} as Parent_Engagement_Score,
+        Parent_Environment_Icon,
+        {{ clean_nda_values('Parent_Environment_Score') }} as Parent_Environment_Score,
+        {{ clean_nda_values('AVERAGE_STUDENT_ATTENDANCE') }} as AVERAGE_STUDENT_ATTENDANCE,
+        {{ clean_nda_values('Rate_of_Misconducts__per_100_students_') }} as Rate_of_Misconducts__per_100_students_,
+        {{ clean_nda_values('Average_Teacher_Attendance') }} as Average_Teacher_Attendance,
+        {{ clean_nda_values('Individualized_Education_Program_Compliance_Rate') }} as Individualized_Education_Program_Compliance_Rate,
+        COMMUNITY_AREA_NUMBER,
+        COMMUNITY_AREA_NAME,
+        Ward,
+        Police_District,
+        X_COORDINATE,
+        Y_COORDINATE,
+        Latitude,
+        Longitude,
+        Location,
+        ingested_at
+    from bronze_schools
+),
+
+-- Step 2: Clean percentage columns by removing % signs
+percentage_cleaned_schools as (
+    select 
+        School_ID,
+        NAME_OF_SCHOOL,
+        school_type,
+        Street_Address,
+        City,
+        State,
+        ZIP_Code,
+        Phone_Number,
+        Link,
+        Network_Manager,
+        Collaborative_Name,
+        Adequate_Yearly_Progress_Made_,
+        Track_Schedule,
+        CPS_Performance_Policy_Status,
+        CPS_Performance_Policy_Level,
+        HEALTHY_SCHOOL_CERTIFIED,
+        Safety_Icon,
+        SAFETY_SCORE,
+        Family_Involvement_Icon,
+        Family_Involvement_Score,
+        Environment_Icon,
+        Environment_Score,
+        Instruction_Icon,
+        Instruction_Score,
+        Leaders_Icon,
+        Leaders_Score,
+        Teachers_Icon,
+        Teachers_Score,
+        Parent_Engagement_Icon,
+        Parent_Engagement_Score,
+        Parent_Environment_Icon,
+        Parent_Environment_Score,
+        -- Remove % signs and convert to numeric
+        try_cast(replace(AVERAGE_STUDENT_ATTENDANCE, '%', '') as float) as AVERAGE_STUDENT_ATTENDANCE,
+        Rate_of_Misconducts__per_100_students_,
+        -- Remove % signs and convert to numeric
+        try_cast(replace(Average_Teacher_Attendance, '%', '') as float) as Average_Teacher_Attendance,
+        -- Remove % signs and convert to numeric
+        try_cast(replace(Individualized_Education_Program_Compliance_Rate, '%', '') as float) as Individualized_Education_Program_Compliance_Rate,
+        COMMUNITY_AREA_NUMBER,
+        COMMUNITY_AREA_NAME,
+        Ward,
+        Police_District,
+        X_COORDINATE,
+        Y_COORDINATE,
+        Latitude,
+        Longitude,
+        Location,
+        ingested_at
+    from nda_cleaned_schools
+),
+
+-- Step 3: Apply data validation and standardization
+standardized_schools as (
     select 
         School_ID,
         NAME_OF_SCHOOL,
@@ -116,8 +224,8 @@ cleaned_schools as (
         end as longitude,
         Location,
         ingested_at
-    from bronze_schools
+    from percentage_cleaned_schools
     where School_ID is not null  -- Remove records without school ID
 )
 
-select * from cleaned_schools
+select * from standardized_schools

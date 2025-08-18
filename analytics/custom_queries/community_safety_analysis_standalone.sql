@@ -14,7 +14,7 @@ with community_analytics as (
         avg_list_price,
         avg_sold_price,
         total_schools
-    from SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics
+    from SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics
     where community_area_name is not null
 ),
 
@@ -157,7 +157,7 @@ select
         else 'Safety Improvement Needed'
     end as safety_assessment
     
-from SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics
+from SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics
 where community_area_name is not null
 order by per_capita_income desc, avg_list_price desc;
 */ 

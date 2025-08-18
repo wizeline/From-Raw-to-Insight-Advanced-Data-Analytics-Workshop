@@ -11,7 +11,7 @@ SELECT
     COUNT(CASE WHEN per_capita_income > 0 THEN 1 END) as communities_with_income,
     COUNT(CASE WHEN total_crime_incidents > 0 THEN 1 END) as communities_with_crime_data,
     COUNT(CASE WHEN avg_list_price > 0 THEN 1 END) as communities_with_real_estate
-FROM SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics;
+FROM SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics;
 
 -- ===========================================
 -- QUERY 2: Top 10 Communities by Income
@@ -24,7 +24,7 @@ SELECT
     ROUND(avg_list_price, 2) as avg_list_price,
     total_crime_incidents,
     ROUND(avg_school_safety_score, 2) as school_safety_score
-FROM SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics
+FROM SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics
 WHERE community_area_name IS NOT NULL
 ORDER BY per_capita_income DESC
 LIMIT 10;
@@ -46,7 +46,7 @@ SELECT
     ROUND(AVG(per_capita_income), 2) as avg_income,
     ROUND(AVG(avg_list_price), 2) as avg_property_value,
     ROUND(AVG(avg_school_safety_score), 2) as avg_school_safety
-FROM SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics
+FROM SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics
 WHERE community_area_name IS NOT NULL
 GROUP BY crime_level
 ORDER BY 
@@ -71,7 +71,7 @@ SELECT
     ROUND(AVG(avg_sold_price), 2) as avg_sold_price,
     ROUND(AVG(avg_bedrooms), 2) as avg_bedrooms,
     ROUND(AVG(avg_bathrooms), 2) as avg_bathrooms
-FROM SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics
+FROM SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics
 WHERE avg_list_price > 0;
 
 -- ===========================================
@@ -90,7 +90,7 @@ SELECT
     ROUND(AVG(avg_list_price), 2) as avg_property_value,
     ROUND(AVG(per_capita_income), 2) as avg_income,
     ROUND(AVG(total_crime_incidents), 2) as avg_crime_incidents
-FROM SNOWFLAKE_LEARNING_DB.workshop.gold_community_analytics
+FROM SNOWFLAKE_LEARNING_DB.workshop_gold.gold_community_analytics
 WHERE avg_school_safety_score > 0
 GROUP BY school_safety_level
 ORDER BY 

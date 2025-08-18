@@ -26,5 +26,5 @@ SELECT
     
 FROM {{ source('raw_data', 'chicago_listings_raw') }}
 QUALIFY COUNT(CASE WHEN listing_date < '2025-08-01' THEN 1 END) 
-        OVER (PARTITION BY CONCAT(COALESCE(beds, 0), 'bed_', COALESCE(baths, 0), 'bath')) > 3;
+        OVER (PARTITION BY CONCAT(COALESCE(beds, 0), 'bed_', COALESCE(baths, 0), 'bath')) > 3
         --Consider only events where timestamp is less than 2025-08-01 and series_id has at least 3 distinct timestamps.

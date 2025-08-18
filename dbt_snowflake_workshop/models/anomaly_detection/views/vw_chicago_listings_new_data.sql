@@ -1,11 +1,12 @@
 {{
   config(
-    materialized='ephemeral',
+    materialized='view',
     schema='anomaly_detection'
   )
 }}
 
     SELECT 
+        SERIES_ID,
         LISTING_ID,
         BEDS,
         BATHS,

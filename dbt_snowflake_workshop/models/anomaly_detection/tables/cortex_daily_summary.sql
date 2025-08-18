@@ -17,7 +17,7 @@ with source as (
     ,percentile
     ,distance
     from {{ ref('anomaly_detection_results') }}
-    WHERE ts = '2025-09-17 00:00:00.000'
+    WHERE ts = TRY_CAST('{{ var("listing_datetime", "2025-09-17 00:00:00.000") }}' AS TIMESTAMP)
    )
    ,anomalies as (
     Select 

@@ -84,6 +84,10 @@ Raw Data → Training View → Model Creation → New Data → Anomaly Detection
 - Provides business-friendly summaries with percent differences
 - Orders anomalies by importance
 - Includes actionable suggestions
+- Configurable date filtering via dbt variables
+
+**Required Variables**:
+- `listing_datetime`: Target date for anomaly analysis (default: "2025-09-17 00:00:00.000")
 
 **What it does**:
 - Processes anomaly detection results for specific dates
@@ -114,7 +118,7 @@ dbt run-operation create_anomaly_object --args '{database: "SNOWFLAKE_LEARNING_D
 dbt run --select anomaly_detection_results --vars '{"database": "SNOWFLAKE_LEARNING_DB", "schema": "WORKSHOP_ANOMALY_DETECTION", "model_name": "DETECT_PRICE_ANOMALY_MULTI_SERIES"}'
 
 # Step 5: Generate AI summary
-dbt run --select cortex_daily_summary
+dbt run --select cortex_daily_summary --vars '{"listing_datetime": "2025-09-17 00:00:00.000"}'
 ```
 
 ## Interpreting Results

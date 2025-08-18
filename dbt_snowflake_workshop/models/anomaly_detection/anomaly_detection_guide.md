@@ -1,106 +1,56 @@
 # Anomaly Detection with Snowflake ML Functions
 
-## What is Anomaly Detection?
+## Overview
 
-Anomaly detection is a machine learning technique used to identify unusual patterns or outliers in data that don't conform to expected behavior. In the context of Snowflake ML Functions, anomaly detection helps you automatically identify data points that are statistically different from the normal patterns in your time series data.
-
-### Key Concepts:
-
-- **Time Series Data**: Data points collected over time (e.g., daily sales, hourly temperatures, listing prices)
-- **Anomalies**: Data points that significantly deviate from the expected pattern
-- **Training Data**: Historical data used to learn normal patterns
-- **Detection**: Process of identifying anomalies in new data
-
-## Snowflake ML Anomaly Detection Features
-
-Snowflake's `SNOWFLAKE.ML.ANOMALY_DETECTION` function provides:
-
-- **Automatic Model Training**: No need to manually tune hyperparameters
-- **Multi-series Support**: Handle multiple related time series simultaneously
-- **Real-time Detection**: Detect anomalies as new data arrives
-- **Confidence Intervals**: Provide uncertainty estimates for predictions
-- **Scalable Processing**: Leverage Snowflake's distributed computing power
+Anomaly detection identifies unusual patterns in time series data. Snowflake ML provides automated anomaly detection with multi-series support, confidence intervals, and scalable processing.
 
 ## Workshop Implementation: Chicago Real Estate Anomaly Detection
 
-This workshop demonstrates anomaly detection on Chicago real estate listing data to identify unusual property prices.
+Detect unusual property prices using historical listing data.
+
 
 ### Data Flow Overview
 
 ```
-Raw Data → Training View → Model Creation → New Data → Anomaly Detection → Results Table
+Raw Data → Training View → Model Creation → New Data → Anomaly Detection → Results Table → AI Summary
 ```
 
 ## Step-by-Step Implementation
 
 ### Step 1: Create Training Data View (`vw_chicago_listings_training`)
 
-**Purpose**: Prepare historical data for model training by creating a structured view with proper series identification.
+**Purpose**: Prepare historical data for model training.
 
 **Key Features**:
-- Converts listing data into time series format
-- Creates `series_id` based on bedroom/bathroom combinations (e.g., "3bed_2bath")
+- Creates time series by bedroom/bathroom combinations
 - Filters data before August 1, 2025 for training
-- Ensures each series has at least 3 data points for reliable training
+- Ensures minimum 3 data points per series
 - Adds anomaly labels for validation
-
-**What it does**:
-```sql
--- Groups properties by bedroom/bathroom combinations
--- Creates time series for each property type
--- Filters to training period (before 2025-08-01)
--- Ensures sufficient data points per series
-```
 
 ### Step 2: Prepare New Data (`vw_chicago_listings_new_data`)
 
 **Purpose**: Create a view containing new data for anomaly detection.
 
 **Key Features**:
-- References the training view
 - Filters data from August 1, 2025 onwards
-- Maintains consistent schema with training data
 - Includes series_id for proper anomaly detection
 - Uses view materialization for better performance
 
-**What it does**:
-```sql
--- Extracts new listings from August 1, 2025 onwards
--- Maintains same structure as training data including series_id
--- Prepares data for anomaly detection
-```
-
 ### Step 3: Create and Train Anomaly Detection Model (`create_anomaly_object` macro)
 
-**Purpose**: Create and train the Snowflake ML anomaly detection model using the prepared training data.
+**Purpose**: Create and train the Snowflake ML anomaly detection model.
 
 **Key Features**:
 - Uses `SNOWFLAKE.ML.ANOMALY_DETECTION` function
 - Trains on historical data (before 2025-08-01)
 - Configures series, timestamp, and target columns
-- Automatically learns normal price patterns for each property type
-- Uses hardcoded reference to training view for simplicity
+- Includes logging for debugging and transparency
 
 **Model Configuration**:
 - **Series Column**: `series_id` (bedroom/bathroom combinations)
 - **Timestamp Column**: `listing_date`
 - **Target Column**: `listprice`
-- **Training Data**: Historical listings before 2025-08-01
 - **Source View**: `SNOWFLAKE_LEARNING_DB.WORKSHOP_ANOMALY_DETECTION.VW_CHICAGO_LISTINGS_TRAINING`
-
-**Enhanced Features**:
-- **Logging**: The macro logs database, schema, and model names for debugging
-- **Dynamic SQL**: Uses dbt's `run_query` function for better error handling
-- **Execution Logging**: Logs the generated SQL for transparency
-
-**What it does**:
-```sql
--- Creates anomaly detection model
--- Trains on historical listing data from the training view
--- Learns normal price patterns for each property type
--- Stores model in Snowflake for future use
--- Logs execution details for debugging and transparency
-```
 
 ### Step 4: Detect Anomalies (`anomaly_detection_results` table)
 
@@ -109,40 +59,44 @@ Raw Data → Training View → Model Creation → New Data → Anomaly Detection
 **Key Features**:
 - Uses the trained model to detect anomalies in new data
 - Applies 95% prediction interval for anomaly detection
-- Stores comprehensive results including confidence bounds
-- Provides anomaly scores and percentiles
 - Uses dbt variables for flexible model configuration
 
 **Required Variables**:
-The model requires the following dbt variables to be set:
-- `database`: The database containing the trained anomaly detection model
-- `schema`: The schema containing the trained model
-- `model_name`: The name of the trained anomaly detection model
+- `database`: Database containing the trained model
+- `schema`: Schema containing the trained model
+- `model_name`: Name of the trained model
 
 **Result Columns**:
 - `SERIES`: Property type (e.g., "3bed_2bath")
 - `TS`: Timestamp of the listing
 - `Y`: Actual listing price
 - `FORECAST`: Predicted normal price
-- `LOWER_BOUND`/`UPPER_BOUND`: Confidence interval bounds
 - `IS_ANOMALY`: Boolean flag for detected anomalies
 - `PERCENTILE`: Anomaly score (0-1)
-- `DISTANCE`: Distance from normal pattern
+
+### Step 5: Generate AI Summary (`cortex_daily_summary` table)
+
+**Purpose**: Create AI-powered daily summaries of detected anomalies using Snowflake Cortex.
+
+**Key Features**:
+- Uses Snowflake Cortex with Claude-3-5-Sonnet model
+- Aggregates anomalies by detection period
+- Provides business-friendly summaries with percent differences
+- Orders anomalies by importance
+- Includes actionable suggestions
 
 **What it does**:
-```sql
--- Applies trained model to new data
--- Detects price anomalies
--- Stores results with confidence intervals
--- Provides anomaly scores and flags
-```
+- Processes anomaly detection results for specific dates
+- Generates concise bullet-point summaries for stakeholders
+- Compares actual vs forecasted values with percent differences
+- Provides business recommendations based on findings
 
 ## Running the Workshop
 
 ### Prerequisites
-1. Ensure you have access to Snowflake with ML functions enabled
-2. Verify your dbt project is configured with proper Snowflake credentials
-3. Confirm raw Chicago listings data is available
+1. Snowflake with ML functions enabled
+2. dbt project configured with Snowflake credentials
+3. Raw Chicago listings data available
 
 ### Execution Commands
 
@@ -158,18 +112,16 @@ dbt run-operation create_anomaly_object --args '{database: "SNOWFLAKE_LEARNING_D
 
 # Step 4: Detect anomalies and store results
 dbt run --select anomaly_detection_results --vars '{"database": "SNOWFLAKE_LEARNING_DB", "schema": "WORKSHOP_ANOMALY_DETECTION", "model_name": "DETECT_PRICE_ANOMALY_MULTI_SERIES"}'
+
+# Step 5: Generate AI summary
+dbt run --select cortex_daily_summary
 ```
 
 ## Interpreting Results
 
 ### Anomaly Detection Output
 
-The `anomaly_detection_results` table contains:
-
-- **Normal Listings**: Prices within expected ranges
-- **Anomalous Listings**: Prices significantly above/below normal patterns
-- **Confidence Intervals**: Uncertainty around predictions
-- **Anomaly Scores**: Quantitative measure of how unusual each listing is
+The `anomaly_detection_results` table contains normal and anomalous listings with confidence intervals and anomaly scores.
 
 ### Example Analysis
 
@@ -186,17 +138,23 @@ FROM anomaly_detection_results
 GROUP BY SERIES;
 ```
 
-## Benefits of This Approach
+### AI Summary Output
+
+The `cortex_daily_summary` table provides:
+- Business-friendly summaries of detected anomalies
+- Percent differences between actual and forecasted values
+- Prioritized anomalies by importance
+- Actionable recommendations for stakeholders
+
+## Benefits
 
 1. **Automated Detection**: No manual threshold setting required
 2. **Multi-series Support**: Handles different property types simultaneously
-3. **Real-time Processing**: Can detect anomalies as new data arrives
+3. **AI-Powered Insights**: Automated business summaries with recommendations
 4. **Scalable**: Leverages Snowflake's distributed computing
 5. **Interpretable**: Provides confidence intervals and anomaly scores
 
 ## Use Cases
-
-This anomaly detection approach can be applied to:
 
 - **Real Estate**: Detect unusual property prices
 - **E-commerce**: Identify pricing anomalies

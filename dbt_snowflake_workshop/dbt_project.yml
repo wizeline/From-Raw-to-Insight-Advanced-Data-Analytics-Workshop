@@ -18,7 +18,7 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-# Configuring models with bronze/silver/gold architecture
+# Configuring models with bronze/silver architecture
 models:
   chicago_analytics:
     # Bronze layer - raw data ingestion
@@ -29,10 +29,6 @@ models:
     silver:
       +materialized: view
       +schema: silver
-    # Gold layer - business-ready aggregated data
-    gold:
-      +materialized: table
-      +schema: gold
 
 # Configuring seeds
 seeds:

@@ -8,7 +8,6 @@ dbt_snowflake_workshop/raw/*.xml
 
 # dbt artifacts
 dbt_snowflake_workshop/target/
-dbt_snowflake_workshop/dbt_packages/
 dbt_snowflake_workshop/dbt_modules/
 dbt_snowflake_workshop/logs/
 dbt_snowflake_workshop/dbt_project.yml.bak
@@ -85,3 +84,6 @@ dbt_snowflake_workshop/seeds/*.json
 
 # Snapshots (if they contain sensitive data)
 dbt_snowflake_workshop/snapshots/*.sql
+
+# User-specific dbt configuration files
+dbt_snowflake_workshop/.user.yml

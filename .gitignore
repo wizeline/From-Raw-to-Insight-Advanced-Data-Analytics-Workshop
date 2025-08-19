@@ -84,3 +84,6 @@ dbt_snowflake_workshop/seeds/*.json
 
 # Snapshots (if they contain sensitive data)
 dbt_snowflake_workshop/snapshots/*.sql
+
+# User-specific dbt configuration files
+dbt_snowflake_workshop/.user.yml

@@ -1,4 +1,4 @@
-USE DATABASE LEARNING_SNOWFLAKE_DB;
+USE DATABASE SNOWFLAKE_LEARNING_DB;
 
 /* Give access to public repo */
 
@@ -28,3 +28,7 @@ CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION dbt_deps_eai
 /* Grant usage to the role that runs your Workspace/commands */
 
 GRANT USAGE ON INTEGRATION dbt_deps_eai TO ROLE ACCOUNTADMIN; 
+
+/* Gain access to data share RAW database */
+
+CREATE DATABASE shared_snowflake_raw FROM SHARE <your_account_locator>.workshop_share;

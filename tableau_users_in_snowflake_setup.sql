@@ -3,19 +3,19 @@
 USE ROLE USERADMIN;
 
 
-SET EMAIL = 'mococa1541@colimarl.com'; --- disposable email
+SET EMAIL = '<email>'; --- disposable email
 
-SET user_name   = 'WSHP_TABLEAU_USER_1';
+SET user_name   = '<user_name>';
 --SET user_name='RUTH.VILLALOBOS.E';
 
 CREATE OR REPLACE USER IDENTIFIER($user_name)
   LOGIN_NAME           = $user_name
-  PASSWORD = 'WIZEDATWSHP7!'
+  PASSWORD = '<a password>'
   --MUST_CHANGE_PASSWORD = TRUE
   DEFAULT_ROLE =  TABLEAU_USER_ROLE_TEST
   DEFAULT_WAREHOUSE = SNOWFLAKE_LEARNING_WH
   DEFAULT_NAMESPACE = SNOWFLAKE_LEARNING_DB.WORKSHOP_GOLD
-  COMMENT = 'Temporary external workshop user'
+  COMMENT = '<a comment>'
   EMAIL                = $EMAIL
   DAYS_TO_EXPIRY = 3;
 
@@ -26,7 +26,7 @@ SHOW USERS;
 
 SELECT *
 FROM TABLE(RESULT_SCAN(LAST_QUERY_ID()))
-WHERE "name" like '%WSHP%'
+WHERE "name" like '%<a pattern>%'
 ORDER BY "created_on" DESC;
 
 
@@ -34,9 +34,9 @@ ORDER BY "created_on" DESC;
 
 USE ROLE SECURITYADMIN;
 GRANT ROLE TABLEAU_USER_ROLE TO USER IDENTIFIER($user_name);
---GRANT ROLE DEV_WSHP_USER_ROLE TO USER IDENTIFIER($user_name);
+
 
 USE ROLE SECURITYADMIN;
 ---drop USERs
-SET TARGET_USER = ('WSHP_TABLEAU_USER_1') ;
+SET TARGET_USER = ('<user_name>') ;
 DROP USER IF EXISTS IDENTIFIER($TARGET_USER);

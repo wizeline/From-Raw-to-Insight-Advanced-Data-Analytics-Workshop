@@ -5,7 +5,7 @@ chicago_analytics:
       type: snowflake
       account: 'not needed'
       user: 'not needed'
-      role: dev_wshp_user_role
+      role: accountadmin
       database: snowflake_learning_db
       schema: workshop
       warehouse: snowflake_learning_wh

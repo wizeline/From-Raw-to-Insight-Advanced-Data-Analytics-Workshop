@@ -85,3 +85,6 @@ dbt_snowflake_workshop/seeds/*.json
 
 # Snapshots (if they contain sensitive data)
 dbt_snowflake_workshop/snapshots/*.sql
+
+# dbt packages lock file
+dbt_snowflake_workshop/package-lock.yml

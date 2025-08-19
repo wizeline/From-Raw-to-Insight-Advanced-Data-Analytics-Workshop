@@ -1,3 +1,12 @@
+USE DATABASE LEARNING_SNOWFLAKE_DB;
+
+/* Give access to public repo */
+
+CREATE OR REPLACE API INTEGRATION git_api_integration_public
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/wizeline/')
+  ENABLED = TRUE;
+
 /* Allow outbound to dbt Hub + GitHub tarballs (network rule) */
 
 CREATE OR REPLACE NETWORK RULE dbt_packages_rule
@@ -19,10 +28,3 @@ CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION dbt_deps_eai
 /* Grant usage to the role that runs your Workspace/commands */
 
 GRANT USAGE ON INTEGRATION dbt_deps_eai TO ROLE ACCOUNTADMIN; 
-
-/* Give access to public repo */
-
-CREATE OR REPLACE API INTEGRATION git_api_integration_public
-  API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com/wizeline/')
-  ENABLED = TRUE;

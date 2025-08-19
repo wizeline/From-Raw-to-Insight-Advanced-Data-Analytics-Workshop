@@ -32,3 +32,7 @@ GRANT USAGE ON INTEGRATION dbt_deps_eai TO ROLE ACCOUNTADMIN;
 /* Gain access to data share RAW database */
 
 CREATE DATABASE snowflake_raw FROM SHARE ZSAXNUM.DEB66449.workshop_share;
+
+/* Create Workshop Schema */
+
+CREATE SCHEMA SNOWFLAKE_LEARNING_DB.WORKSHOP;

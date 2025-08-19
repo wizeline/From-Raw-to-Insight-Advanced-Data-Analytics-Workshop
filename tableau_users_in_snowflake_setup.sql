@@ -3,10 +3,10 @@
 USE ROLE USERADMIN;
 
 
-SET EMAIL = '<email>'; --- disposable email
+SET EMAIL = '<email>'; 
 
 SET user_name   = '<user_name>';
---SET user_name='RUTH.VILLALOBOS.E';
+
 
 CREATE OR REPLACE USER IDENTIFIER($user_name)
   LOGIN_NAME           = $user_name

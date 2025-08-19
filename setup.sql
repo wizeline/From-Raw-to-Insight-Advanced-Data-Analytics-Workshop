@@ -31,4 +31,4 @@ GRANT USAGE ON INTEGRATION dbt_deps_eai TO ROLE ACCOUNTADMIN;
 
 /* Gain access to data share RAW database */
 
-CREATE DATABASE shared_snowflake_raw FROM SHARE <your_account_locator>.workshop_share;
+CREATE DATABASE snowflake_raw FROM SHARE ZSAXNUM.DEB66449.workshop_share;

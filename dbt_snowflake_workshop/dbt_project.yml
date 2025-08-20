@@ -50,5 +50,5 @@ snapshots:
 
 # Configuring tests
 tests:
-  +store_failures: true
+  +store_failures: false
   +severity: warn

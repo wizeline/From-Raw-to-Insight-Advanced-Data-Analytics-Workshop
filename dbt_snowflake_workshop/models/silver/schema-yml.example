@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: silver_table
+    description: Cleaned and standardized data
+    columns:
+      - name: COLUMN_1
+        tests:
+      - name: COLUMN_2
+        tests:
+      - name: COLUMN_3
+        tests:

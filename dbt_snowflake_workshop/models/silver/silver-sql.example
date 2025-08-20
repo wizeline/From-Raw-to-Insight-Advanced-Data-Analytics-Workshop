@@ -1,0 +1,18 @@
+{{
+  config(
+    materialized='view',
+    schema='silver'
+  )
+}}
+
+-- Silver layer: Cleaned and standardized bronze table
+-- This model applies data quality checks and standardization
+with bronze_table as (
+    select * from {{ ref('bronze_table') }}
+),
+
+cleaned_table as (
+  -- Add your cleaning logic here
+)
+
+select * from cleaned_table

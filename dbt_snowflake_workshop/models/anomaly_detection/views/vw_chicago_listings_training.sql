@@ -24,7 +24,7 @@ SELECT
     END AS IS_ANOMALY,
     CONCAT(COALESCE(CAST(beds AS NUMBER(38,0)), 0), 'bed_', COALESCE(CAST(baths AS NUMBER(38,0)), 0), 'bath')::VARCHAR(16777216) AS series_id,
     
-FROM {{ source('raw_data', 'chicago_listings_raw') }}
+FROM {{ ref('bronze_listings') }}
 QUALIFY COUNT(CASE WHEN listing_date < '2025-08-01' THEN 1 END) 
         OVER (PARTITION BY CONCAT(COALESCE(beds, 0), 'bed_', COALESCE(baths, 0), 'bath')) > 3
         --Consider only events where timestamp is less than 2025-08-01 and series_id has at least 3 distinct timestamps.
